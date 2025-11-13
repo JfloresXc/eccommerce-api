@@ -10,23 +10,50 @@ export class ProductsRepository implements IRepository<Product> {
     @InjectModel(Product.name) private productModel: Model<Product>,
   ) {}
 
+  /**
+   * Create a new product document in the database.
+   * @param data Partial product data to create the document.
+   * @returns The persisted Product document.
+   */
   async create(data: Partial<Product>): Promise<Product> {
     const product = new this.productModel(data);
     return product.save();
   }
 
+  /**
+   * Find a product by its MongoDB identifier.
+   * @param id The product `_id` as string.
+   * @returns The Product document or null if not found.
+   */
   async findById(id: string): Promise<Product | null> {
-    return this.productModel.findById(id).populate('category').exec();
+    return this.productModel.findById(id).exec();
   }
 
+  /**
+   * Find a single product by a filter query.
+   * @param filter Mongoose filter to locate a product.
+   * @returns The Product document or null if not found.
+   */
   async findOne(filter: FilterQuery<Product>): Promise<Product | null> {
-    return this.productModel.findOne(filter).populate('category').exec();
+    return this.productModel.findOne(filter).exec();
   }
 
+  /**
+   * Find multiple products by a filter query.
+   * @param filter Mongoose filter to locate products.
+   * @returns Array of Product documents.
+   */
   async find(filter: FilterQuery<Product>): Promise<Product[]> {
-    return this.productModel.find(filter).populate('category').exec();
+    return this.productModel.find(filter).exec();
   }
 
+  /**
+   * Paginate product results using a filter.
+   * @param filter Mongoose filter to apply.
+   * @param page Page number (1-based).
+   * @param limit Items per page.
+   * @returns Data and total count for the current page.
+   */
   async findWithPagination(
     filter: FilterQuery<Product>,
     page: number,
@@ -37,7 +64,6 @@ export class ProductsRepository implements IRepository<Product> {
     const [data, total] = await Promise.all([
       this.productModel
         .find(filter)
-        .populate('category')
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 })
@@ -48,6 +74,13 @@ export class ProductsRepository implements IRepository<Product> {
     return { data, total };
   }
 
+  /**
+   * Full-text search products by a term using MongoDB text index.
+   * @param searchTerm The text to search in indexed fields.
+   * @param page Page number (1-based).
+   * @param limit Items per page.
+   * @returns Data and total count for the search results.
+   */
   async findWithSearch(
     searchTerm: string,
     page: number,
@@ -57,13 +90,11 @@ export class ProductsRepository implements IRepository<Product> {
 
     const filter = {
       $text: { $search: searchTerm },
-      isActive: true,
     };
 
     const [data, total] = await Promise.all([
       this.productModel
-        .find(filter)
-        .populate('category')
+        .find(filter as any)
         .skip(skip)
         .limit(limit)
         .sort({ score: { $meta: 'textScore' } })
@@ -74,16 +105,26 @@ export class ProductsRepository implements IRepository<Product> {
     return { data, total };
   }
 
+  /**
+   * Update a product document by id.
+   * @param id Product `_id` as string.
+   * @param data Update query with changes.
+   * @returns The updated Product document or null if not found.
+   */
   async update(
     id: string,
     data: UpdateQuery<Product>,
   ): Promise<Product | null> {
     return this.productModel
       .findByIdAndUpdate(id, data, { new: true })
-      .populate('category')
       .exec();
   }
 
+  /**
+   * Delete a product by id.
+   * @param id Product `_id` as string.
+   * @returns True if deleted, false otherwise.
+   */
   async delete(id: string): Promise<boolean> {
     const result = await this.productModel.findByIdAndDelete(id).exec();
     return !!result;

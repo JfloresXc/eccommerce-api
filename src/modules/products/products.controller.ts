@@ -22,6 +22,16 @@ export class ProductsController {
     return this.productsService.create(createProductDto);
   }
 
+  /**
+   * Agrega un arreglo de productos sin validaciones ni upsert.
+   * @param products Arreglo de productos.
+   * @returns Resumen de creados y errores.
+   */
+  @Post('bulk')
+  importBulk(@Body() products: CreateProductDto[]) {
+    return this.productsService.importBulkProducts(products);
+  }
+
   @Get()
   findAll(@Query() queryProductDto: QueryProductDto) {
     return this.productsService.findAll(queryProductDto);

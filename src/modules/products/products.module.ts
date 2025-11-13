@@ -4,13 +4,15 @@ import { ProductsService } from './products.service';
 import { ProductsController } from './products.controller';
 import { ProductsRepository } from './products.repository';
 import { Product, ProductSchema } from './entities/product.entity';
+import { CategoriesModule } from '../categories/categories.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
+    CategoriesModule,
   ],
   controllers: [ProductsController],
   providers: [ProductsService, ProductsRepository],
   exports: [ProductsService, ProductsRepository],
 })
-export class ProductsModule {}
+export class ProductsModule { }

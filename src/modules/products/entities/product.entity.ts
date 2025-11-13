@@ -1,9 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
-import { Category } from '../../categories/entities/category.entity';
+import { Document } from 'mongoose';
+
+export type ProductDocument = Product & Document;
 
 @Schema({ timestamps: true })
-export class Product extends Document {
+export class Product {
+  @Prop({ required: true, unique: true, index: true, min: 0 })
+  id: number;
+
   @Prop({ required: true, index: true })
   name: string;
 
@@ -16,14 +20,23 @@ export class Product extends Document {
   @Prop({ required: true, min: 0, default: 0 })
   stock: number;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Category', index: true })
-  category: Category;
+  @Prop({ required: true })
+  category: string;
 
-  @Prop({ type: [String], default: [] })
-  images: string[];
+  @Prop({ required: true, min: 0 })
+  categoryId: number;
 
-  @Prop({ default: true })
-  isActive: boolean;
+  @Prop({ required: true })
+  image: string;
+
+  @Prop({ min: 0, default: 0 })
+  discount?: number;
+
+  @Prop({ min: 0, default: 0 })
+  rating?: number;
+
+  @Prop({ default: false })
+  featured?: boolean;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

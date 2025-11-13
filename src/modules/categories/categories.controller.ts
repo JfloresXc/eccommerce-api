@@ -20,6 +20,17 @@ export class CategoriesController {
     return this.categoriesService.create(createCategoryDto);
   }
 
+  /**
+   * Agrega un arreglo de categorías sin validaciones ni upsert.
+   * Este endpoint acepta un array libre para evitar el ValidationPipe.
+   * @param categories Arreglo de objetos categoría (id, name, slug, ...).
+   * @returns Resumen de creados y errores.
+   */
+  @Post('bulk')
+  importBulk(@Body() categories: any[]) {
+    return this.categoriesService.importBulkCategories(categories as any);
+  }
+
   @Get()
   findAll() {
     return this.categoriesService.findAll();
