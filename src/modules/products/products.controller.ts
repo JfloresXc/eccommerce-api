@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
+import { DeleteManyDto } from './dto/delete-many.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { QueryProductDto } from './dto/query-product.dto';
 
@@ -50,5 +51,15 @@ export class ProductsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productsService.remove(id);
+  }
+
+  /**
+   * Deletes multiple products by their IDs.
+   * @param deleteManyDto DTO containing an array of product IDs to delete.
+   * @returns An object with the count of deleted documents.
+   */
+  @Delete('bulk/delete')
+  removeMany(@Body() deleteManyDto: DeleteManyDto) {
+    return this.productsService.removeMany(deleteManyDto);
   }
 }

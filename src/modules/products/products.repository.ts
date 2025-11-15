@@ -129,4 +129,16 @@ export class ProductsRepository implements IRepository<Product> {
     const result = await this.productModel.findByIdAndDelete(id).exec();
     return !!result;
   }
+
+  /**
+   * Deletes multiple products by their IDs.
+   * @param ids An array of product `_id` strings.
+   * @returns An object with the count of deleted documents.
+   */
+  async deleteMany(ids: string[]): Promise<{ deletedCount: number }> {
+    const result = await this.productModel
+      .deleteMany({ _id: { $in: ids } })
+      .exec();
+    return { deletedCount: result.deletedCount };
+  }
 }

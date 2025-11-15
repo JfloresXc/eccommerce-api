@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { CategoriesRepository } from '../categories/categories.repository';
 import { CreateProductDto } from './dto/create-product.dto';
+import { DeleteManyDto } from './dto/delete-many.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { QueryProductDto } from './dto/query-product.dto';
 import { Product } from './entities/product.entity';
@@ -128,5 +129,16 @@ export class ProductsService {
     if (!deleted) {
       throw new NotFoundException(`Product with ID ${id} not found`);
     }
+  }
+
+  /**
+   * Removes multiple products by their IDs.
+   * @param deleteManyDto DTO containing an array of product IDs to delete.
+   * @returns An object with the count of deleted documents.
+   */
+  async removeMany(
+    deleteManyDto: DeleteManyDto,
+  ): Promise<{ deletedCount: number }> {
+    return this.productsRepository.deleteMany(deleteManyDto.ids);
   }
 }
