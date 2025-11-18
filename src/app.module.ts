@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { ProductsModule } from './modules/products/products.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 import databaseConfig from './config/database.config';
 import appConfig from './config/app.config';
 
@@ -21,6 +23,9 @@ import appConfig from './config/app.config';
     // Feature modules
     ProductsModule,
     CategoriesModule,
+    // Auth and Users modules
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
