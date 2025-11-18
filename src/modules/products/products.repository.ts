@@ -21,6 +21,29 @@ export class ProductsRepository implements IRepository<Product> {
   }
 
   /**
+   * Updates multiple products in a single bulk operation.
+   * @param updates An array of objects, each with an 'id' and 'updateProductDto'.
+   * @returns An object with the count of modified documents.
+   */
+  async updateMany(
+    updates: { id: string; updateProductDto: UpdateQuery<Product> }[],
+  ): Promise<{ modifiedCount: number }> {
+    const operations = updates.map((update) => ({
+      updateOne: {
+        filter: { _id: update.id },
+        update: { $set: update.updateProductDto },
+      },
+    }));
+
+    if (operations.length === 0) {
+      return { modifiedCount: 0 };
+    }
+
+    const result = await this.productModel.bulkWrite(operations);
+    return { modifiedCount: result.modifiedCount };
+  }
+
+  /**
    * Find a product by its MongoDB identifier.
    * @param id The product `_id` as string.
    * @returns The Product document or null if not found.

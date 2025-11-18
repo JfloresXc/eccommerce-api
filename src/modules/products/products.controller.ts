@@ -12,6 +12,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { DeleteManyDto } from './dto/delete-many.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { UpdateProductsBulkDto } from './dto/update-products-bulk.dto';
 import { QueryProductDto } from './dto/query-product.dto';
 
 @Controller('products')
@@ -61,5 +62,15 @@ export class ProductsController {
   @Delete('bulk/delete')
   removeMany(@Body() deleteManyDto: DeleteManyDto) {
     return this.productsService.removeMany(deleteManyDto);
+  }
+
+  /**
+   * Updates multiple products in bulk.
+   * @param updateProductsBulkDto An array of DTOs with product IDs and update data.
+   * @returns An object with the count of modified documents.
+   */
+  @Patch('bulk/update')
+  updateBulk(@Body() updateProductsBulkDto: UpdateProductsBulkDto[]) {
+    return this.productsService.updateBulk(updateProductsBulkDto);
   }
 }
