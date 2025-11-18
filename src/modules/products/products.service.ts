@@ -4,6 +4,7 @@ import { CategoriesRepository } from '../categories/categories.repository';
 import { CreateProductDto } from './dto/create-product.dto';
 import { DeleteManyDto } from './dto/delete-many.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { UpdateProductsBulkDto } from './dto/update-products-bulk.dto';
 import { QueryProductDto } from './dto/query-product.dto';
 import { Product } from './entities/product.entity';
 import { PaginatedResponseDto } from '../../common/dto/pagination-response.dto';
@@ -140,5 +141,16 @@ export class ProductsService {
     deleteManyDto: DeleteManyDto,
   ): Promise<{ deletedCount: number }> {
     return this.productsRepository.deleteMany(deleteManyDto.ids);
+  }
+
+  /**
+   * Updates multiple products in bulk.
+   * @param updateProductsBulkDto An array of DTOs, each with an 'id' and 'updateProductDto'.
+   * @returns An object with the count of modified documents.
+   */
+  async updateBulk(
+    updateProductsBulkDto: UpdateProductsBulkDto[],
+  ): Promise<{ modifiedCount: number }> {
+    return this.productsRepository.updateMany(updateProductsBulkDto);
   }
 }
