@@ -39,6 +39,11 @@ export class ProductsController {
     return this.productsService.findAll(queryProductDto);
   }
 
+  @Get('featured')
+  findFeatured() {
+    return this.productsService.findFeatured();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);

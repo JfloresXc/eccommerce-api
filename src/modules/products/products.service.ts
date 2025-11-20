@@ -153,4 +153,12 @@ export class ProductsService {
   ): Promise<{ modifiedCount: number }> {
     return this.productsRepository.updateMany(updateProductsBulkDto);
   }
+
+  /**
+   * Find the top 10 featured products.
+   * @returns Array of Product documents.
+   */
+  async findFeatured(): Promise<Product[]> {
+    return this.productsRepository.findFeatured();
+  }
 }

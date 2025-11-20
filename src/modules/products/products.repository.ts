@@ -164,4 +164,16 @@ export class ProductsRepository implements IRepository<Product> {
       .exec();
     return { deletedCount: result.deletedCount };
   }
+
+  /**
+   * Find the top 10 featured products.
+   * @returns Array of Product documents.
+   */
+  async findFeatured(): Promise<Product[]> {
+    return this.productModel
+      .find({ featured: true })
+      .limit(10)
+      .sort({ createdAt: -1 })
+      .exec();
+  }
 }
