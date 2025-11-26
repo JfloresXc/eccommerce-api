@@ -78,4 +78,9 @@ export class ProductsController {
   updateBulk(@Body() updateProductsBulkDto: UpdateProductsBulkDto[]) {
     return this.productsService.updateBulk(updateProductsBulkDto);
   }
+
+  @Post('addPriceBefore')
+  addPriceBefore() {
+    return this.productsService.addPriceBefore();
+  }
 }
