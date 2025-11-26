@@ -25,4 +25,7 @@ export class CreateCategoryDto {
   @IsOptional()
   @IsString()
   image?: string;
+
+  @IsOptional()
+  featured?: boolean;
 }

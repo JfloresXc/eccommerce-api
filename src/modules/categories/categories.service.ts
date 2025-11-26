@@ -94,4 +94,18 @@ export class CategoriesService {
       throw new NotFoundException(`Category with ID ${id} not found`);
     }
   }
+
+  async featureRandomCategories(): Promise<Category[]> {
+    const categories = await this.categoriesRepository.find({});
+    const categoriesToFeatureIds = categories
+      .filter(() => Math.random() > 0.5)
+      .map((c) => c._id);
+    await this.categoriesRepository.updateMany(
+      { _id: { $in: categoriesToFeatureIds } },
+      { featured: true },
+    );
+    return this.categoriesRepository.find({
+      _id: { $in: categoriesToFeatureIds },
+    });
+  }
 }
