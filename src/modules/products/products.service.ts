@@ -161,4 +161,26 @@ export class ProductsService {
   async findFeatured(): Promise<Product[]> {
     return this.productsRepository.findFeatured();
   }
+
+  async addPriceBefore(): Promise<{ updatedCount: number }> {
+    const products = await this.productsRepository.find({});
+    const updates = products
+      .filter(() => Math.random() > 0.5)
+      .map((product) => {
+        return {
+          id: (product as any)._id.toString(),
+          updateProductDto: {
+            priceBefore: product.price,
+            price: Math.floor(product.price * 0.8),
+          },
+        };
+      });
+
+    if (updates.length === 0) {
+      return { updatedCount: 0 };
+    }
+
+    const result = await this.productsRepository.updateMany(updates);
+    return { updatedCount: result.modifiedCount };
+  }
 }
