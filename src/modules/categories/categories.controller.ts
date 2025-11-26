@@ -53,9 +53,4 @@ export class CategoriesController {
   remove(@Param('id') id: string) {
     return this.categoriesService.remove(id);
   }
-
-  @Post('feature-random')
-  featureRandom() {
-    return this.categoriesService.featureRandomCategories();
-  }
 }

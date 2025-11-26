@@ -91,11 +91,4 @@ export class CategoriesRepository implements IRepository<Category> {
     const result = await this.categoryModel.findByIdAndDelete(id).exec();
     return !!result;
   }
-
-  async updateMany(
-    filter: FilterQuery<Category>,
-    data: UpdateQuery<Category>,
-  ): Promise<any> {
-    return this.categoryModel.updateMany(filter, data).exec();
-  }
 }
