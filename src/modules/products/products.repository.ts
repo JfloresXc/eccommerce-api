@@ -8,7 +8,7 @@ import { IRepository } from '../../common/interfaces/repository.interface';
 export class ProductsRepository implements IRepository<Product> {
   constructor(
     @InjectModel(Product.name) private productModel: Model<Product>,
-  ) {}
+  ) { }
 
   /**
    * Create a new product document in the database.
@@ -49,7 +49,7 @@ export class ProductsRepository implements IRepository<Product> {
    * @returns The Product document or null if not found.
    */
   async findById(id: string): Promise<Product | null> {
-    return this.productModel.findById(id).exec();
+    return this.productModel.findOne({ id }).exec();
   }
 
   /**
