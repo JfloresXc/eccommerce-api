@@ -23,7 +23,7 @@ export class CategoriesService {
    * @param categories Arreglo de categorías a agregar.
    * @returns Resumen con creados y errores por item.
    */
-  async importBulkCategories(categories: CreateCategoryDto[]): Promise<{ created: number; updated: number; errors: Array<{ item: any; error: string }> }>{
+  async importBulkCategories(categories: CreateCategoryDto[]): Promise<{ created: number; updated: number; errors: Array<{ item: any; error: string }> }> {
     let created = 0;
     const updated = 0;
     const errors: Array<{ item: any; error: string }> = [];
@@ -99,7 +99,7 @@ export class CategoriesService {
     const categories = await this.categoriesRepository.find({});
     const categoriesToFeatureIds = categories
       .filter(() => Math.random() > 0.5)
-      .map((c) => c._id);
+      .map((c) => c.id);
     await this.categoriesRepository.updateMany(
       { _id: { $in: categoriesToFeatureIds } },
       { featured: true },
@@ -107,5 +107,13 @@ export class CategoriesService {
     return this.categoriesRepository.find({
       _id: { $in: categoriesToFeatureIds },
     });
+  }
+
+  /**
+   * Retrieve all categories with featured set to false.
+   * @returns Array of Category documents that are not featured.
+   */
+  async findNotFeatured(): Promise<Category[]> {
+    return this.categoriesRepository.find({ featured: false });
   }
 }

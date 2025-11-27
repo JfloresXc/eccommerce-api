@@ -58,4 +58,9 @@ export class CategoriesController {
   featureRandom() {
     return this.categoriesService.featureRandomCategories();
   }
+
+  @Get('not-featured')
+  findNotFeatured() {
+    return this.categoriesService.findNotFeatured();
+  }
 }
