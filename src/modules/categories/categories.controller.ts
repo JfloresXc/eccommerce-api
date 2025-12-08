@@ -36,6 +36,11 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
+  @Get('featured')
+  findFeatured() {
+    return this.categoriesService.findFeatured();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoriesService.findOne(id);
@@ -57,10 +62,5 @@ export class CategoriesController {
   @Post('feature-random')
   featureRandom() {
     return this.categoriesService.featureRandomCategories();
-  }
-
-  @Get('not-featured')
-  findNotFeatured() {
-    return this.categoriesService.findNotFeatured();
   }
 }

@@ -113,7 +113,7 @@ export class CategoriesService {
    * Retrieve all categories with featured set to false.
    * @returns Array of Category documents that are not featured.
    */
-  async findNotFeatured(): Promise<Category[]> {
-    return this.categoriesRepository.find({ featured: false });
+  async findFeatured(): Promise<Category[]> {
+    return this.categoriesRepository.find({ featured: true });
   }
 }

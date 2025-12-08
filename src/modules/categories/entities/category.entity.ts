@@ -24,7 +24,7 @@ export class Category {
   image?: string;
 
   @Prop({ default: false })
-  featured: boolean;
+  featured?: boolean;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);
