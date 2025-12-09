@@ -7,6 +7,7 @@ import { ProductsModule } from './modules/products/products.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
+import { WishlistModule } from './modules/wishlist/wishlist.module';
 import databaseConfig from './config/database.config';
 import appConfig from './config/app.config';
 
@@ -26,8 +27,9 @@ import appConfig from './config/app.config';
     // Auth and Users modules
     AuthModule,
     UsersModule,
+    WishlistModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

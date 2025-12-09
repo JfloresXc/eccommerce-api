@@ -9,6 +9,11 @@ interface JwtPayload {
   sub: string;
 }
 
+interface LoginUser {
+  _id: string;
+  email: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -27,8 +32,8 @@ export class AuthService {
     return null;
   }
 
-  login(user = {} as { email: string; id: string }) {
-    const payload = { email: user.email, sub: user.id };
+  login(user: LoginUser) {
+    const payload = { email: user.email, sub: user._id };
     const accessTokenExpiration =
       this.configService.get<string>('app.jwtAccessTokenExpiration') || '15m';
     const refreshTokenExpiration =
@@ -44,6 +49,8 @@ export class AuthService {
     return {
       access_token,
       refresh_token,
+      userId: user._id,
+      email: user.email,
     };
   }
 
