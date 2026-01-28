@@ -35,7 +35,7 @@ export class AuthService {
   login(user: LoginUser) {
     const payload = { email: user.email, sub: user._id };
     const accessTokenExpiration =
-      this.configService.get<string>('app.jwtAccessTokenExpiration') || '15m';
+      this.configService.get<string>('app.jwtAccessTokenExpiration') || '45m';
     const refreshTokenExpiration =
       this.configService.get<string>('app.jwtRefreshTokenExpiration') || '7d';
 

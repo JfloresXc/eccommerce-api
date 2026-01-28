@@ -38,6 +38,7 @@ export class WishlistService {
   }
 
   async getWishlist(userId: string) {
+    console.log(userId)
     const userObjectId = new Types.ObjectId(userId);
     const wishlistItems = await this.wishlistRepository.findByUserId(
       userObjectId,

@@ -1,27 +1,51 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User } from './schemas/user.schema';
 import * as bcrypt from 'bcryptjs';
+import { usersData } from '../../database/mocks';
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) { }
+  private users: User[] = [...usersData];
 
-  async findOneByEmail(email: string): Promise<User | null> {
-    return this.userModel.findOne({ email }).exec();
+  async findOneByEmail(email: string): Promise<any | null> {
+    const user = this.users.find((u) => u.email === email);
+    if (!user) return null;
+
+    return {
+      ...user,
+      toObject: () => ({ ...user }),
+    };
   }
 
-  async create(user: Partial<User>): Promise<User> {
+  async create(user: Partial<User>): Promise<any> {
     const hashedPassword = await bcrypt.hash(user?.password ?? '', 10);
-    const createdUser = new this.userModel({
-      ...user,
+    const newUser: User = {
+      _id: this.generateId(),
+      name: user.name ?? '',
+      email: user.email ?? '',
       password: hashedPassword,
-    });
-    return createdUser.save();
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      __v: 0,
+    };
+    this.users.push(newUser);
+    return newUser;
   }
 
   async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    return [...this.users];
+  }
+
+  private generateId(): string {
+    return Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
   }
 }
