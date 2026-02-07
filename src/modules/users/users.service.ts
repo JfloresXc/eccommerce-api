@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { usersData } from '../../database/mocks';
 
-interface User {
+export interface User {
   _id: string;
   name: string;
   email: string;
@@ -16,14 +16,11 @@ interface User {
 export class UsersService {
   private users: User[] = [...usersData];
 
-  async findOneByEmail(email: string): Promise<any | null> {
+  findOneByEmail(email: string): User | null {
     const user = this.users.find((u) => u.email === email);
     if (!user) return null;
 
-    return {
-      ...user,
-      toObject: () => ({ ...user }),
-    };
+    return user;
   }
 
   async create(user: Partial<User>): Promise<any> {
@@ -46,6 +43,8 @@ export class UsersService {
   }
 
   private generateId(): string {
-    return Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+    return (
+      Math.random().toString(36).substring(2, 15) + Date.now().toString(36)
+    );
   }
 }

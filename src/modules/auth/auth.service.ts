@@ -1,17 +1,14 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UsersService } from '../users/users.service';
+import { User, UsersService } from '../users/users.service';
+import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
+import { LoginUserDto } from './dto/login-user.dto';
 
 interface JwtPayload {
   email: string;
   sub: string;
-}
-
-interface LoginUser {
-  _id: string;
-  email: string;
 }
 
 @Injectable()
@@ -20,22 +17,27 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) { }
+  ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOneByEmail(email);
-    if (user && (await bcrypt.compare(pass, user.password))) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user.toObject();
-      return result;
+  validateUser(email: string, pass: string): User | null {
+    const user = this.usersService.findOneByEmail(email);
+    if (user && user.password == pass) {
+      return user;
     }
     return null;
   }
 
-  login(user: LoginUser) {
+  login(loginDto: LoginUserDto) {
+    const user = this.validateUser(loginDto.email, loginDto.password);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
     const payload = { email: user.email, sub: user._id };
+
     const accessTokenExpiration =
-      this.configService.get<string>('app.jwtAccessTokenExpiration') || '45m';
+      this.configService.get<string>('app.jwtAccessTokenExpiration') || '1d';
     const refreshTokenExpiration =
       this.configService.get<string>('app.jwtRefreshTokenExpiration') || '7d';
 

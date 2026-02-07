@@ -15,16 +15,18 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @Controller('wishlist')
 @UseGuards(JwtAuthGuard)
 export class WishlistController {
-  constructor(private readonly wishlistService: WishlistService) { }
+  constructor(private readonly wishlistService: WishlistService) {}
 
   @Post()
   addToWishlist(@Request() req, @Body() createWishlistDto: CreateWishlistDto) {
-    return this.wishlistService.addToWishlist(req.user.userId, createWishlistDto);
+    return this.wishlistService.addToWishlist(
+      req.user.userId,
+      createWishlistDto,
+    );
   }
 
   @Get()
   getWishlist(@Request() req) {
-    console.log(req?.user);
     return this.wishlistService.getWishlist(req.user.userId);
   }
 

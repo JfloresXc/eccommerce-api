@@ -13,7 +13,7 @@ export class WishlistService {
   constructor(
     private readonly wishlistRepository: WishlistRepository,
     private readonly productsRepository: ProductsRepository,
-  ) { }
+  ) {}
 
   async addToWishlist(userId: string, createWishlistDto: CreateWishlistDto) {
     const { productId } = createWishlistDto;
@@ -38,11 +38,9 @@ export class WishlistService {
   }
 
   async getWishlist(userId: string) {
-    console.log(userId)
     const userObjectId = new Types.ObjectId(userId);
-    const wishlistItems = await this.wishlistRepository.findByUserId(
-      userObjectId,
-    );
+    const wishlistItems =
+      await this.wishlistRepository.findByUserId(userObjectId);
 
     const productIds = wishlistItems.map((item) => item.productId);
     const products = await this.productsRepository.find({
